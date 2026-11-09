@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* Design tokens. Tailwind v4 turns these into utilities:
+   bg-paper, bg-surface, text-ink, text-muted, bg-signal, bg-caption, border-line */
+:root {
+  --paper: #eef1f6;
+  --surface: #ffffff;
+  --ink: #16202e;
+  --muted: #5b6778;
+  --line: #d5dbe5;
+  --signal: #3b4bdb;
+  --signal-deep: #2d3bb8;
+  --caption: #ffd966;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-signal: var(--signal);
+  --color-signal-deep: var(--signal-deep);
+  --color-caption: var(--caption);
+
+  /* Set by next/font in layout.tsx */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-source), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--caption);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
