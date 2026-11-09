@@ -12,6 +12,7 @@ import {
   Square,
   Trash2,
   Maximize2,
+  PictureInPicture2,
 } from "lucide-react";
 import type { CaptionLine, CaptionStatus } from "../lib/useLiveCaptions";
 
@@ -23,6 +24,8 @@ interface Props {
   onTogglePause: () => void;
   onClear: () => void;
   onStop: () => void;
+  /** Shown only when the browser supports an always-on-top window */
+  onPopOut?: () => void;
 }
 
 export default function CaptionWindow({
@@ -33,6 +36,7 @@ export default function CaptionWindow({
   onTogglePause,
   onClear,
   onStop,
+  onPopOut,
 }: Props) {
   const bounds = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -126,6 +130,11 @@ export default function CaptionWindow({
           <button className={btn} onClick={onClear} aria-label="Clear captions" title="Clear captions">
             <Trash2 size={16} />
           </button>
+          {onPopOut && (
+            <button className={btn} onClick={onPopOut} aria-label="Pop out always on top" title="Pop out always on top">
+              <PictureInPicture2 size={16} />
+            </button>
+          )}
           <button
             className={btn}
             onClick={() => setMinimized((m) => !m)}

@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { ArrowLeft, Mic, Monitor, Play, Square } from "lucide-react";
 import CaptionWindow from "../../components/CaptionWindow";
+import CaptionPanel from "../../components/CaptionPanel";
+import { usePictureInPicture } from "../../lib/usePictureInPicture";
 import { useLiveCaptions, type AudioSource } from "../../lib/useLiveCaptions";
 
 const SOURCES: {
@@ -29,6 +32,8 @@ const SOURCES: {
 export default function TranslatePage() {
   const { status, error, lines, paused, level, start, stop, setPaused, clear } =
     useLiveCaptions();
+  const { supported: pipSupported, pipWindow, open: openPip, close: closePip } =
+    usePictureInPicture();
   const [source, setSource] = useState<AudioSource>("tab");
   const [tabSupported, setTabSupported] = useState(true);
 
@@ -40,6 +45,16 @@ export default function TranslatePage() {
   }, []);
 
   const running = status !== "idle";
+
+  // Close the always-on-top window when captions stop
+  useEffect(() => {
+    if (status === "idle") closePip();
+  }, [status, closePip]);
+
+  const handleStop = () => {
+    stop();
+    closePip();
+  };
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-8 sm:px-8">
@@ -169,7 +184,7 @@ export default function TranslatePage() {
         </section>
       )}
 
-      {running && (
+      {running && !pipWindow && (
         <CaptionWindow
           lines={lines}
           status={status}
@@ -177,9 +192,27 @@ export default function TranslatePage() {
           error={error}
           onTogglePause={() => setPaused(!paused)}
           onClear={clear}
-          onStop={stop}
+          onStop={handleStop}
+          onPopOut={pipSupported ? () => void openPip() : undefined}
         />
       )}
+
+      {running &&
+        pipWindow &&
+        createPortal(
+          <CaptionPanel
+            lines={lines}
+            status={status}
+            paused={paused}
+            error={error}
+            onTogglePause={() => setPaused(!paused)}
+            onClear={clear}
+            onStop={handleStop}
+            onReturn={closePip}
+            copyText={(text) => pipWindow.navigator.clipboard.writeText(text)}
+          />,
+          pipWindow.document.body
+        )}
     </main>
   );
 }
