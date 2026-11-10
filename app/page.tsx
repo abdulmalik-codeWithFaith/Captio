@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 // Replace with your real repository URL
-const GITHUB_URL = "https://github.com/YOUR_USERNAME/captio";
+const GITHUB_URL = "https://github.com/abdulmalik-codeWithFaith/captio";
 
 function GithubMark({ size = 18 }: { size?: number }) {
   return (
