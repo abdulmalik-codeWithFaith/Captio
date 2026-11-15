@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 const MODEL = process.env.GROQ_ANSWER_MODEL || "llama-3.3-70b-versatile";
 
 // Keep prompts small: the free tier limits tokens per minute.

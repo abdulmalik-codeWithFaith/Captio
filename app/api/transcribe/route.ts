@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// export const runtime = "nodejs";
-
-// Short live segments are small. This only guards against abuse.
 const MAX_BYTES = 4 * 1024 * 1024;
 
 /**
