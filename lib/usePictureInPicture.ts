@@ -28,7 +28,7 @@ export function usePictureInPicture() {
     const api = window.documentPictureInPicture;
     if (!api) return;
 
-    const win = await api.requestWindow({ width: 480, height: 260 });
+    const win = await api.requestWindow({ width: 520, height: 400 });
 
     // The new window starts empty, so copy this page's styles into it.
     for (const sheet of Array.from(document.styleSheets)) {
