@@ -15,6 +15,7 @@ import {
   PictureInPicture2,
 } from "lucide-react";
 import type { CaptionLine, CaptionStatus } from "../lib/useLiveCaptions";
+import AnswerCard, { type Assist } from "./AnswerCard";
 
 interface Props {
   lines: CaptionLine[];
@@ -26,6 +27,8 @@ interface Props {
   onStop: () => void;
   /** Shown only when the browser supports an always-on-top window */
   onPopOut?: () => void;
+  /** Answer Questions mode: shows suggested answers above the captions */
+  assist?: Assist;
 }
 
 export default function CaptionWindow({
@@ -37,6 +40,7 @@ export default function CaptionWindow({
   onClear,
   onStop,
   onPopOut,
+  assist,
 }: Props) {
   const bounds = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -85,7 +89,7 @@ export default function CaptionWindow({
         aria-label="Live caption window"
         style={{ backgroundColor: `rgba(22, 32, 46, ${opacity})` }}
         className={`pointer-events-auto absolute inset-x-0 bottom-6 mx-auto flex w-[min(92vw,34rem)] min-w-[18rem] max-w-[95vw] flex-col overflow-hidden rounded-xl text-white shadow-2xl shadow-black/40 backdrop-blur ${
-          minimized ? "" : "h-64 min-h-[9rem] resize"
+          minimized ? "" : `${assist ? "h-96" : "h-64"} min-h-[9rem] resize`
         }`}
       >
         {/* Title bar: the only part that drags */}
@@ -147,6 +151,8 @@ export default function CaptionWindow({
             <Square size={14} />
           </button>
         </div>
+
+        {!minimized && assist && <AnswerCard {...assist} />}
 
         {!minimized && (
           <div ref={bodyRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-3">

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Pause, PictureInPicture2, Play, Square, Trash2 } from "lucide-react";
 import type { CaptionLine, CaptionStatus } from "../lib/useLiveCaptions";
+import AnswerCard, { type Assist } from "./AnswerCard";
 
 interface Props {
   lines: CaptionLine[];
@@ -15,6 +16,7 @@ interface Props {
   onReturn: () => void;
   /** Clipboard of the window this panel lives in */
   copyText: (text: string) => Promise<void>;
+  assist?: Assist;
 }
 
 /** Full-window caption view for the Picture-in-Picture window. Resize it with the OS window edges. */
@@ -28,6 +30,7 @@ export default function CaptionPanel({
   onStop,
   onReturn,
   copyText,
+  assist,
 }: Props) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
@@ -79,6 +82,8 @@ export default function CaptionPanel({
           <Square size={14} />
         </button>
       </div>
+
+      {assist && <AnswerCard {...assist} />}
 
       <div ref={bodyRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
         {lines.length === 0 ? (
